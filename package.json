@@ -1,0 +1,37 @@
+{
+  "name": "rn-storage-debugger",
+  "version": "0.0.2",
+  "description": "Debug and manage AsyncStorage in React Native applications",
+  "main": "src/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "files": [
+    "src",
+    "types"
+  ],
+  "keywords": [
+    "react-native",
+    "asyncstorage",
+    "debug",
+    "development",
+    "storage"
+  ],
+  "author": "rogercg",
+  "license": "MIT",
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=1.0.0",
+    "react-native": ">=0.60.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rogercg/rn-storage-debugger"
+  },
+  "bugs": {
+    "url": "https://github.com/rogercg/rn-storage-debugger/issues"
+  }
+}

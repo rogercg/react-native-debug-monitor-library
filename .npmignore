@@ -1,0 +1,19 @@
+# Tests
+__tests__/
+*.test.js
+
+# Development files
+example/
+.vscode/
+.git/
+.gitignore
+.npmignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# Documentation files
+docs/
+*.md
+!README.md
