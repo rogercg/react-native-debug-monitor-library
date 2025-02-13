@@ -8,11 +8,61 @@ class StorageDebugger {
         this.reconnectInterval = null;
         this.isInitialized = false;
         this._hasStarted = false;
-        console.log('📦 StorageDebugger constructor called');
+        this.serverIP = null;
+        console.log('📦 StorageDebugger constructor called 2');
     }
 
     getDebugHost() {
-        return Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
+        if (this.serverIP) {
+            console.log('🔧 Using custom server IP:', this.serverIP);
+            return this.serverIP;
+        }
+        const defaultHost = Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
+        console.log('🔧 Using default host:', defaultHost);
+        return defaultHost;
+    }
+
+    setServerIP(ip) {
+        if (!ip) return this;
+        
+        // Validación básica de IP
+        const isValidIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip);
+        
+        if (!isValidIP) {
+            console.warn('⚠️ Invalid IP address:', ip);
+            return this;
+        }
+        
+        this.serverIP = ip;
+        console.log('🔧 Server IP set to:', ip);
+        return this;
+    }
+
+    // Modificamos start para aceptar opciones
+    start(options = {}) {
+        console.log("options ip: ", options);
+        if (this._hasStarted) {
+            console.log('⚠️ StorageDebugger already started');
+            return false;
+        }
+        
+        if (typeof __DEV__ === 'undefined' || !__DEV__) {
+            console.log('StorageDebugger only runs in development mode');
+            return false;
+        }
+
+        this._hasStarted = true;
+
+        
+        
+        if (options.serverIP) {
+            console.log('🔧 Setting custom server IP:', options.serverIP);
+            this.setServerIP(options.serverIP);
+        }
+
+        console.log('🚀 StorageDebugger starting...');
+        this.connect();
+        return true;
     }
 
     connect() {
@@ -62,6 +112,12 @@ class StorageDebugger {
                                     type: 'STORAGE_DATA',
                                     data
                                 }));
+                            }
+                            break;
+                        case 'DELETE_VALUE':
+                            if (message.data?.key) {
+                                await AsyncStorage.removeItem(message.data.key);
+                                await this.sendStorageData();
                             }
                             break;
                         case 'UPDATE_VALUE':
@@ -141,24 +197,6 @@ class StorageDebugger {
             }));
         } catch (error) {
             console.error('❌ Error sending storage data:', error);
-        }
-    }
-
-    start() {
-        // Prevenir múltiples inicializaciones
-        if (this._hasStarted) {
-            return;
-        }
-        this._hasStarted = true;
-
-        // Solo iniciar en modo desarrollo
-        if (typeof __DEV__ !== 'undefined' && __DEV__) {
-            console.log('🚀 StorageDebugger starting...');
-            this.connect();
-            return true;
-        } else {
-            console.log('StorageDebugger only runs in development mode');
-            return false;
         }
     }
 
