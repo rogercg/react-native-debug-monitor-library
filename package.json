@@ -1,6 +1,6 @@
 {
   "name": "rn-storage-debugger",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Debug and manage AsyncStorage in React Native applications",
   "main": "src/index.js",
   "types": "types/index.d.ts",
