@@ -49,15 +49,35 @@ if (__DEV__) {
 }
 ```
 
+Custom Port
+```javascript
+StorageDebugger.start({
+  port: 8083              // Replace with your custom port. Optional Property.
+});
+```
+Reload the app after changing the port.
+
 ### 4.2 Physical Device Setup
 When using a physical device, specify your computer's IP address:
 
 ```javascript
 if (__DEV__) {
   // For physical devices
-  StorageDebugger.start({ serverIP: '192.168.1.100' });  // Replace with your computer's local IP address
+  StorageDebugger.start({ serverIP: '192.168.1.100' });  // Replace with your computer's local IP address. Optional Property.
 }
 ```
+Reload the app after changing the IP.
+### 4.3 Advanced Setup
+
+For advanced configurations, you can specify additional options:
+
+```javascript
+StorageDebugger.start({
+  serverIP: '192.168.1.100',  // Replace with your computer's local IP address. Optional Property.
+  port: 8083,                // Replace with your custom port. Optional Property.
+});
+```
+Reload the app after changing the port or IP.
 
 ### 4.3 VSCode Integration
 1. Open Command Palette (Cmd/Ctrl + Shift + P)
@@ -70,11 +90,12 @@ if (__DEV__) {
 ```typescript
 interface StorageDebuggerOptions {
   serverIP?: string;  // Your computer's IP address for physical devices
+  port?: string;  // Custom port
 }
 ```
 
 ### 5.2 Default Configuration
-- Default port: 8082
+- Default port: 12380
 - Default host: 
   - Emulators: Automatically configured
   - iOS Simulator: 'localhost'
@@ -85,7 +106,7 @@ interface StorageDebuggerOptions {
 ### 6.1 Physical Device Connection Issues
 - Ensure device and computer are on the same network
 - Verify the correct IP address is being used
-- Check if port 8082 is not blocked by firewall
+- Check if port 12380 is not blocked by firewall
 - Confirm the development server is running
 
 ### 6.2 Common Issues and Solutions

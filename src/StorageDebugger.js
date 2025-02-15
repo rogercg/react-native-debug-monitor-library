@@ -9,6 +9,8 @@ class StorageDebugger {
         this.isInitialized = false;
         this._hasStarted = false;
         this.serverIP = null;
+        // this.port = 12380;
+        this.port = null;
         console.log('📦 StorageDebugger constructor called 2');
     }
 
@@ -25,7 +27,6 @@ class StorageDebugger {
     setServerIP(ip) {
         if (!ip) return this;
         
-        // Validación básica de IP
         const isValidIP = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip);
         
         if (!isValidIP) {
@@ -35,12 +36,36 @@ class StorageDebugger {
         
         this.serverIP = ip;
         console.log('🔧 Server IP set to:', ip);
+
+        // Si ya está conectado, reiniciar la conexión con la nueva IP
+        if (this._hasStarted) {
+            console.log('🔄 Restarting connection with new IP...');
+            this.connect();
+        }
+
+        return this;
+    }
+
+    setPort(port) {
+        if (!port || isNaN(port) || port < 1 || port > 65535) {
+            console.warn('⚠️ Invalid port number:', port);
+            return this;
+        }
+        
+        this.port = port;
+        console.log('🔧 Port set to:', port);
+
+        // Si ya está conectado, reiniciar la conexión con el nuevo puerto
+        if (this._hasStarted) {
+            console.log('🔄 Restarting connection with new port...');
+            this.connect();
+        }
+
         return this;
     }
 
     // Modificamos start para aceptar opciones
     start(options = {}) {
-        console.log("options ip: ", options);
         if (this._hasStarted) {
             console.log('⚠️ StorageDebugger already started');
             return false;
@@ -50,15 +75,19 @@ class StorageDebugger {
             console.log('StorageDebugger only runs in development mode');
             return false;
         }
-
-        this._hasStarted = true;
-
-        
         
         if (options.serverIP) {
             console.log('🔧 Setting custom server IP:', options.serverIP);
             this.setServerIP(options.serverIP);
         }
+
+        if (options.port) {
+            console.log('🔧 Setting custom port:', options.port);
+            // this.setPort(options.port);
+            this.port = parseInt(options.port);
+        }
+
+        this._hasStarted = true;
 
         console.log('🚀 StorageDebugger starting...');
         this.connect();
@@ -73,10 +102,12 @@ class StorageDebugger {
         }
 
         const debugHost = this.getDebugHost();
-        console.log(`🔌 Attempting to connect to WebSocket at ${debugHost}:8082...`);
+        const port = this.port || 12380;
+        const wsUrl = `ws://${debugHost}:${port}`.trim();
+        console.log(`🔌 Attempting to connect to WebSocket at ${wsUrl}`);
         
         try {
-            this.ws = new WebSocket(`ws://${debugHost}:8082`);
+            this.ws = new WebSocket(wsUrl);
 
             this.ws.onopen = () => {
                 console.log('✅ WebSocket connection established');
@@ -125,6 +156,10 @@ class StorageDebugger {
                                 await this.updateValue(message.data.key, message.data.value);
                                 await this.sendStorageData();
                             }
+                            break;
+                        case 'CLEAR_ALL_STORAGE':
+                            await this.clearAllStorage();
+                            await this.sendStorageData();
                             break;
                     }
                 } catch (error) {
@@ -180,6 +215,18 @@ class StorageDebugger {
             return true;
         } catch (error) {
             console.error('❌ Error updating storage:', error);
+            return false;
+        }
+    }
+
+    async clearAllStorage() {
+        try {
+            const keys = await AsyncStorage.getAllKeys();
+            await AsyncStorage.multiRemove(keys);
+            console.log('✅ All storage items cleared');
+            return true;
+        } catch (error) {
+            console.error('❌ Error clearing storage:', error);
             return false;
         }
     }
