@@ -1,6 +1,6 @@
 {
   "name": "react-native-debug-monitor",
-  "version": "1.0.0-preview.1",
+  "version": "1.0.1",
   "description": "Monitor and debug AsyncStorage and Network requests in React Native applications",
   "main": "src/index.js",
   "types": "types/index.d.ts",

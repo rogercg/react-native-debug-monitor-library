@@ -130,7 +130,7 @@ class StorageDebugger {
             this.ws.onmessage = async (event) => {
                 try {
                     const message = JSON.parse(event.data);
-                    console.log('📥 Received message:', message);
+                    // console.log('📥 Received message:', message);
                     
                     switch (message.type) {
                         case 'GET_STORAGE':
