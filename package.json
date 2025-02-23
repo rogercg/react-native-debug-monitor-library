@@ -1,7 +1,7 @@
 {
-  "name": "rn-storage-debugger",
-  "version": "0.0.4",
-  "description": "Debug and manage AsyncStorage in React Native applications",
+  "name": "react-native-debug-monitor",
+  "version": "1.0.0-preview.1",
+  "description": "Monitor and debug AsyncStorage and Network requests in React Native applications",
   "main": "src/index.js",
   "types": "types/index.d.ts",
   "scripts": {
@@ -14,9 +14,11 @@
   "keywords": [
     "react-native",
     "asyncstorage",
+    "network",
     "debug",
     "development",
-    "storage"
+    "storage",
+    "monitor"
   ],
   "author": "rogercg",
   "license": "MIT",

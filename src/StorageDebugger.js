@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
+import NetworkMonitor from './NetworkMonitor';
+
 class StorageDebugger {
     constructor() {
         this.ws = null;
@@ -9,9 +11,8 @@ class StorageDebugger {
         this.isInitialized = false;
         this._hasStarted = false;
         this.serverIP = null;
-        // this.port = 12380;
         this.port = null;
-        console.log('📦 StorageDebugger constructor called 2');
+        this.networkMonitor = null;
     }
 
     getDebugHost() {
@@ -37,7 +38,6 @@ class StorageDebugger {
         this.serverIP = ip;
         console.log('🔧 Server IP set to:', ip);
 
-        // Si ya está conectado, reiniciar la conexión con la nueva IP
         if (this._hasStarted) {
             console.log('🔄 Restarting connection with new IP...');
             this.connect();
@@ -55,7 +55,6 @@ class StorageDebugger {
         this.port = port;
         console.log('🔧 Port set to:', port);
 
-        // Si ya está conectado, reiniciar la conexión con el nuevo puerto
         if (this._hasStarted) {
             console.log('🔄 Restarting connection with new port...');
             this.connect();
@@ -64,7 +63,6 @@ class StorageDebugger {
         return this;
     }
 
-    // Modificamos start para aceptar opciones
     start(options = {}) {
         if (this._hasStarted) {
             console.log('⚠️ StorageDebugger already started');
@@ -83,7 +81,6 @@ class StorageDebugger {
 
         if (options.port) {
             console.log('🔧 Setting custom port:', options.port);
-            // this.setPort(options.port);
             this.port = parseInt(options.port);
         }
 
@@ -261,6 +258,27 @@ class StorageDebugger {
     }
 }
 
-// Exportar una única instancia
 const instance = new StorageDebugger();
+
+const networkMonitor = new NetworkMonitor(instance);
+
+const originalStart = instance.start;
+instance.start = function(options = {}) {
+    const result = originalStart.call(this, options);
+    
+    if (result && options.monitorNetwork !== false) {
+        networkMonitor.start();
+    }
+    
+    return result;
+};
+
+const originalStop = instance.stop;
+instance.stop = function() {
+    networkMonitor.stop();
+    return originalStop.call(this);
+};
+
+instance.networkMonitor = networkMonitor;
+
 export default instance;
