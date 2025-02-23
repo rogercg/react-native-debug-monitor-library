@@ -31,9 +31,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rogercg/rn-storage-debugger"
+    "url": "https://github.com/rogercg/react-native-debug-monitor-library"
   },
   "bugs": {
-    "url": "https://github.com/rogercg/rn-storage-debugger/issues"
+    "url": "https://github.com/rogercg/react-native-debug-monitor-library/issues"
   }
 }
