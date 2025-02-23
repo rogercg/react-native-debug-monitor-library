@@ -1,5 +1,5 @@
-# RN Storage Debugger
-Real-time AsyncStorage and Network Debugging Tool for React Native
+# React Native Debug Monitor
+AsyncStorage and Network Debugging Tool for React Native
 
 ## Table of Contents
 1. Introduction
@@ -13,18 +13,18 @@ Real-time AsyncStorage and Network Debugging Tool for React Native
 9. License
 
 ## 1. Introduction
-RN Storage Debugger is a development tool designed to facilitate real-time debugging and management of AsyncStorage and Network requests in React Native applications. Through its integration with Visual Studio Code, developers can visualize, edit, and manage AsyncStorage data and monitor network activity directly from their development environment.
+React Native Debug Monitor is a development tool designed to facilitate real-time debugging and management of AsyncStorage and Network requests in React Native applications. Through its integration with Visual Studio Code, developers can visualize, edit, and manage AsyncStorage data and monitor network activity directly from their development environment.
 
 ## 2. Installation
 
 ### 2.1 NPM Package
 Install the npm package in your React Native project:
 ```bash
-npm install --save-dev rn-storage-debugger
+npm install --save-dev react-native-debug-monitor
 ```
 
 ### 2.2 VSCode Extension
-Install the "RN Storage Manager" extension from the Visual Studio Code marketplace.
+Install the "React Native Debug Monitor" extension from the Visual Studio Code marketplace.
 
 ## 3. Features
 - Real-time AsyncStorage visualization
@@ -44,7 +44,7 @@ Install the "RN Storage Manager" extension from the Visual Studio Code marketpla
 Add the following code to your React Native application's entry point:
 
 ```javascript
-import StorageDebugger from 'rn-storage-debugger';
+import StorageDebugger from 'react-native-debug-monitor';
 
 if (__DEV__) {
   // For emulators
@@ -56,7 +56,7 @@ if (__DEV__) {
 To enable network monitoring with Axios:
 
 ```javascript
-import StorageDebugger from 'rn-storage-debugger';
+import StorageDebugger from 'react-native-debug-monitor';
 import axios from './axiosCustom';  // Your axios instance
 
 if (__DEV__) {
